@@ -6,7 +6,7 @@ import android.view.MotionEvent
 import android.widget.ImageView
 import java.lang.Math.sqrt
 
-class ResizableImageView(context: Context, attrs: AttributeSet) : ImageView(context, attrs) {
+class ResizableImageView(context: Context, attrs: AttributeSet) : androidx.appcompat.widget.AppCompatImageView(context, attrs) {
 
     private var mLastTouchX: Float = 0f
     private var mLastTouchY: Float = 0f
@@ -19,8 +19,8 @@ class ResizableImageView(context: Context, attrs: AttributeSet) : ImageView(cont
             MotionEvent.ACTION_DOWN -> {
                 mLastTouchX = event.x
                 mLastTouchY = event.y
-                mLastHeight = height
-                mLastWidth = width
+                mLastHeight = this.height
+                mLastWidth = this.width
             }
             MotionEvent.ACTION_MOVE -> {
                 val deltaX = event.x - mLastTouchX
@@ -28,8 +28,9 @@ class ResizableImageView(context: Context, attrs: AttributeSet) : ImageView(cont
                 val distance = sqrt(deltaX * deltaX + deltaY * deltaY.toDouble()).toFloat()
 
                 val scale = distance / 217 // Adjust this value as needed
-                var newWidth = (mLastWidth * scale).toInt()
-                var newHeight = (mLastHeight * scale).toInt()
+                println(scale)
+                var newWidth = (150 * scale).toInt()
+                var newHeight = (150 * scale).toInt()
 
                 if( newWidth < 80)
                     newWidth = 80
