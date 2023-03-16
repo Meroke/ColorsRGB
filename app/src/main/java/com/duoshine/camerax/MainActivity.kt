@@ -35,7 +35,8 @@ class MainActivity : AppCompatActivity() {
     private var imageAnalysis: ImageAnalysis? = null
 
     private lateinit var imageView: ImageView
-    private lateinit var seekBar: SeekBar
+    private lateinit var horizontalSeekBar: SeekBar
+    private lateinit var verticalSeekBar: SeekBar
     private var scaleFactor = 1f
     /**
      * 默认分辨率。他最好是一个比较适配主流机型的值，否则CameraX将会自动降低他,
@@ -51,27 +52,24 @@ class MainActivity : AppCompatActivity() {
         requestPermission()
         initCamera()
         initView()
-        val color_edit: EditText = findViewById(R.id.Color)
-        color_edit.setCursorVisible(false)
         val red_edit: EditText = findViewById(R.id.Red)
         red_edit.setCursorVisible(false)
         val green_edit: EditText = findViewById(R.id.Green)
         green_edit.setCursorVisible(false)
-        val blue_edit: EditText = findViewById(R.id.Blue)
-        blue_edit.setCursorVisible(false)
-        val editText01: EditText = findViewById(R.id.editText01)
-        editText01.setCursorVisible(false)
-        val editText02: EditText = findViewById(R.id.editText02)
-        editText02.setCursorVisible(false)
+        val advise_edit: EditText = findViewById(R.id.advise)
+        advise_edit.setCursorVisible(false)
+
 
 
         imageView = findViewById(R.id.rotate_img)
-        seekBar = findViewById<SeekBar>(R.id.zoomSeekBar)
-
+        horizontalSeekBar = findViewById<SeekBar>(R.id.horzontalSeekBar)
+        verticalSeekBar = findViewById<SeekBar>(R.id.verticalSeekBar)
         // Set the max value of the seek bar to the width of the image
         imageView.post {
             val width = imageView.width
-            seekBar.max = width
+            horizontalSeekBar.max = width
+            verticalSeekBar.max = imageView.height
+
         }
 
         // Set the progress of the seek bar to the initial position of the image
@@ -79,24 +77,37 @@ class MainActivity : AppCompatActivity() {
             override fun onGlobalLayout() {
                 imageView.viewTreeObserver.removeOnGlobalLayoutListener(this)
                 val initialPosition = imageView.left
-                seekBar.progress = initialPosition
+                horizontalSeekBar.progress = initialPosition
+                verticalSeekBar.progress = imageView.bottom
             }
         })
 
         // Add a listener to the seek bar to move the image horizontally
-        seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+        horizontalSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(horizontalSeekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 imageView.translationX = progress.toFloat()
             }
 
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStartTrackingTouch(horizontalSeekBar: SeekBar?) {}
 
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStopTrackingTouch(horizontalSeekBar: SeekBar?) {}
         })
+        verticalSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(verticalSeekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                imageView.translationY = progress.toFloat()
+            }
+
+            override fun onStartTrackingTouch(verticalSeekBar: SeekBar?) {}
+
+            override fun onStopTrackingTouch(verticalSeekBar: SeekBar?) {}
+        })
+
 
 
     }
 
+
+    
     private fun initView() {
 //        h264Record.setOnClickListener {
 //            customRecording()

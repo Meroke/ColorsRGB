@@ -5,6 +5,7 @@
       <map>
         <entry key="..\:/Code/Andorid/CameraX-master/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.21041666666666667" />
         <entry key="..\:/Code/Andorid/CameraX-master/app/src/main/res/drawable/Blue_boder.xml" value="0.21041666666666667" />
+        <entry key="..\:/Code/Andorid/CameraX-master/app/src/main/res/drawable/blue_boder.xml" value="0.2078125" />
         <entry key="..\:/Code/Andorid/CameraX-master/app/src/main/res/drawable/gray_boder.xml" value="0.21041666666666667" />
         <entry key="..\:/Code/Andorid/CameraX-master/app/src/main/res/drawable/green_boder.xml" value="0.21041666666666667" />
         <entry key="..\:/Code/Andorid/CameraX-master/app/src/main/res/drawable/ic_baseline_fullscreen_24.xml" value="0.14722222222222223" />
@@ -12,6 +13,7 @@
         <entry key="..\:/Code/Andorid/CameraX-master/app/src/main/res/drawable/ic_full_screen_thiner.xml" value="0.1" />
         <entry key="..\:/Code/Andorid/CameraX-master/app/src/main/res/drawable/ic_launcher_background.xml" value="0.29010416666666666" />
         <entry key="..\:/Code/Andorid/CameraX-master/app/src/main/res/drawable/ic_svg.xml" value="0.1175925925925926" />
+        <entry key="..\:/Code/Andorid/CameraX-master/app/src/main/res/drawable/pink_boder.xml" value="0.2046875" />
         <entry key="..\:/Code/Andorid/CameraX-master/app/src/main/res/drawable/red_boder.xml" value="0.1175925925925926" />
         <entry key="..\:/Code/Andorid/CameraX-master/app/src/main/res/drawable/setbar_bg.xml" value="0.29010416666666666" />
         <entry key="..\:/Code/Andorid/CameraX-master/app/src/main/res/drawable/textview_border.xml" value="0.1" />
@@ -19,6 +21,7 @@
         <entry key="..\:/Code/Andorid/CameraX-master/app/src/main/res/layout-land/activity_main.xml" value="0.1" />
         <entry key="..\:/Code/Andorid/CameraX-master/app/src/main/res/layout-land/landspace_mode.xml" value="0.12" />
         <entry key="..\:/Code/Andorid/CameraX-master/app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="..\:/Code/Andorid/CameraX-master/app/src/main/res/layout/pink_boder.xml" value="0.18854166666666666" />
       </map>
     </option>
   </component>

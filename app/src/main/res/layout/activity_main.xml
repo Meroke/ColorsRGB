@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/root"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -17,97 +18,124 @@
 
         <LinearLayout
             android:id="@+id/colorLinerLayout"
-            android:layout_width="177dp"
+            android:layout_width="160dp"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:alpha="0.95"
+            android:background="@drawable/white_boder"
+            android:orientation="vertical"
+            android:paddingTop="40dp">
 
-            <EditText
-                android:id="@+id/Red"
-                android:layout_width="150dp"
-                android:layout_height="60dp"
-                android:layout_marginTop="50dp"
-                android:layout_weight="1"
-                android:background="@drawable/red_boder"
+
+            <RelativeLayout
+                android:id="@+id/valueLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
                 android:gravity="center"
-                android:text="R:128"
-                android:textColor="@color/white"
-                android:textSize="20sp" />
+                android:orientation="horizontal">
 
-            <EditText
-                android:id="@+id/Green"
-                android:layout_width="150dp"
-                android:layout_height="60dp"
-                android:layout_marginTop="50dp"
-                android:layout_weight="1"
-                android:background="@drawable/green_boder"
+                <EditText
+                    android:id="@+id/PH"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:background="@null"
+                    android:text="PH"
+                    android:textSize="20dp"
+                    android:textStyle="bold"
+                    android:typeface="sans" />
+
+                <com.lihang.ShadowLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/PH"
+                    app:hl_cornerRadius="18dp"
+                    app:hl_endColor="#cc99ff"
+                    app:hl_shadowColor="@color/black"
+                    app:hl_shadowLimit="15dp"
+                    app:hl_startColor="#9933ff">
+
+                    <EditText
+                        android:id="@+id/Red"
+                        android:layout_width="75dp"
+                        android:layout_height="60dp"
+
+                        android:background="@null"
+                        android:gravity="center_vertical|center_horizontal"
+                        android:text="7.5"
+                        android:textColor="@color/black"
+                        android:textSize="20sp" />
+                </com.lihang.ShadowLayout>
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
                 android:gravity="center"
-                android:text="G:128"
-                android:textColor="@color/white"
-                android:textSize="20sp" />
+                android:orientation="horizontal">
 
-            <EditText
-                android:id="@+id/Blue"
-                android:layout_width="150dp"
-                android:layout_height="60dp"
+                <EditText
+                    android:id="@+id/UA"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:background="@null"
+                    android:text="UA"
+                    android:textSize="20dp"
+                    android:textStyle="bold"
+                    android:typeface="sans" />
+
+                <com.lihang.ShadowLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/UA"
+                    app:hl_cornerRadius="18dp"
+                    app:hl_endColor="#ff9933"
+                    app:hl_shadowColor="@color/black"
+                    app:hl_shadowLimit="15dp"
+                    app:hl_startColor="@color/orange">
+
+                    <EditText
+                        android:id="@+id/Green"
+                        android:layout_width="75dp"
+                        android:layout_height="60dp"
+                        android:layout_weight="1"
+                        android:background="@null"
+                        android:gravity="center_vertical|center_horizontal"
+                        android:text="15"
+                        android:textColor="@color/black"
+                        android:textSize="20sp" />
+                </com.lihang.ShadowLayout>
+            </RelativeLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1.5dp"
+                android:background="@color/gray" />
+
+            <com.lihang.ShadowLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="50dp"
-                android:layout_weight="1"
-                android:background="@drawable/blue_boder"
-                android:gravity="center"
-                android:text="B:128"
-                android:textColor="@color/white"
-                android:textSize="20sp" />
+                app:hl_cornerRadius="15dp"
+                app:hl_shadowColor="@color/black"
+                app:hl_shadowLimit="5dp">
 
-            <EditText
-                android:id="@+id/Color"
-                android:layout_width="150dp"
-                android:layout_height="60dp"
-                android:layout_marginTop="50dp"
-                android:layout_weight="1"
-                android:background="@drawable/gray_boder"
-                android:gravity="center"
-                android:text="#808080"
-                android:textColor="@color/white"
-                android:textSize="20sp" />
-
+                <EditText
+                    android:id="@+id/advise"
+                    android:layout_width="150dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/gray_boder"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:text="容易感染"
+                    android:textColor="@color/black"
+                    android:textSize="20sp" />
+            </com.lihang.ShadowLayout>
         </LinearLayout>
 
-
-        <LinearLayout
-            android:id="@+id/textLinerLayout"
-            android:layout_width="400dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:orientation="horizontal"
-            android:layout_marginTop="10dp"
-            >
-
-            <EditText
-                android:id="@+id/editText01"
-                android:layout_width="50dp"
-                android:layout_height="60dp"
-
-                android:layout_weight="1"
-                android:alpha="0.6"
-                android:background="@color/gray"
-                android:gravity="center"
-                />
-            <TextView
-                android:layout_width="100dp"
-                android:layout_height="80dp"
-                android:alpha="0.7"
-                />
-            <EditText
-                android:id="@+id/editText02"
-                android:layout_width="50dp"
-                android:layout_height="60dp"
-                android:layout_weight="1"
-                android:alpha="0.6"
-                android:background="@color/gray"
-                android:orientation="vertical"
-                android:gravity="center"
-                />
-        </LinearLayout>
 
         <Button
             android:id="@+id/start"
@@ -115,20 +143,24 @@
             android:layout_height="80dp"
             android:layout_alignRight="@id/previewView"
             android:layout_centerVertical="true"
+            android:layout_marginRight="370dp"
             android:alpha="0.7"
             android:background="@drawable/setbar_bg"
-            android:text="开始检测"
-            android:rotation="-90"/>
+            android:rotation="-90"
+            android:text="START" />
 
         <com.duoshine.camerax.ResizableImageView
             android:id="@+id/rotate_img"
             android:layout_width="150dp"
             android:layout_height="150dp"
-            android:layout_centerInParent="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="160dp"
+            android:background="@null"
+            android:rotation="270"
             android:scaleType="fitXY"
             android:src="@mipmap/target_circle_white" />
         <SeekBar
-            android:id="@+id/zoomSeekBar"
+            android:id="@+id/horzontalSeekBar"
             android:layout_width="450dp"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -137,6 +169,19 @@
             android:progress="50"
             android:alpha="0"
             android:paddingBottom="30dp"/>
+
+        <SeekBar
+            android:id="@+id/verticalSeekBar"
+            android:layout_width="300dp"
+            android:layout_height="450dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:alpha="1"
+            android:max="100"
+            android:progress="50"
+            android:rotation="90"
+            />
+
 
     </RelativeLayout>
 </LinearLayout>

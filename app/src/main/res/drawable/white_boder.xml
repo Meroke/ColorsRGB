@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
 
-    android:shape="oval"
-    android:useLevel="false">
     <solid android:color="@color/white" />
     <stroke android:width="2.5dip" android:color="@color/white" />
     <size
         android:width="15dp"
         android:height="15dp" />
-    <corners android:radius="20dp" />属性就是设置圆角
+    <corners android:topRightRadius="20dp" android:bottomRightRadius="20dp"/>属性就是设置圆角
 
 </shape>
