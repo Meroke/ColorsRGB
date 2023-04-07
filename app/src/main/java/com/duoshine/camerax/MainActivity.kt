@@ -3,30 +3,29 @@ package com.duoshine.camerax
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
-import android.os.Build
-import android.os.Bundle
-import android.os.Environment
 import android.util.Log
 import android.util.Size
 import android.view.Surface
-import android.view.View
 import android.view.ViewTreeObserver
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.Preview
-import androidx.camera.core.internal.utils.ImageUtil
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 import com.google.common.util.concurrent.ListenableFuture
 import kotlinx.android.synthetic.main.activity_main.*
-import java.io.File
-import android.widget.LinearLayout
-import android.graphics.Matrix as Matrix
 
+import android.graphics.*
+import android.graphics.drawable.Drawable
+import android.os.*
+import androidx.camera.core.ImageProxy
+import com.squareup.picasso.Picasso
+import com.squareup.picasso.Target
+import java.lang.Exception
 
 class MainActivity : AppCompatActivity() {
     private lateinit var cameraProviderFuture: ListenableFuture<ProcessCameraProvider>
@@ -38,6 +37,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var horizontalSeekBar: SeekBar
     private lateinit var verticalSeekBar: SeekBar
     private var scaleFactor = 1f
+    private val REQUEST_PERMISSIONS = 100
     /**
      * 默认分辨率。他最好是一个比较适配主流机型的值，否则CameraX将会自动降低他,
      * 注意别写死了导致编码失败 demo中[customRecording]方法处理了size不支持的情况
@@ -52,12 +52,14 @@ class MainActivity : AppCompatActivity() {
         requestPermission()
         initCamera()
         initView()
+        val color_edit: EditText = findViewById(R.id.PH)
+        color_edit.setCursorVisible(false)
         val red_edit: EditText = findViewById(R.id.Red)
         red_edit.setCursorVisible(false)
         val green_edit: EditText = findViewById(R.id.Green)
         green_edit.setCursorVisible(false)
-        val advise_edit: EditText = findViewById(R.id.advise)
-        advise_edit.setCursorVisible(false)
+        val blue_edit: EditText = findViewById(R.id.Blue)
+        blue_edit.setCursorVisible(false)
 
 
 
@@ -67,45 +69,47 @@ class MainActivity : AppCompatActivity() {
         // Set the max value of the seek bar to the width of the image
         imageView.post {
             val width = imageView.width
-            horizontalSeekBar.max = width
-            verticalSeekBar.max = imageView.height
+            horizontalSeekBar.max = width * 2
+            verticalSeekBar.max = imageView.height * 2
 
         }
 
-        // Set the progress of the seek bar to the initial position of the image
-        imageView.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
-            override fun onGlobalLayout() {
-                imageView.viewTreeObserver.removeOnGlobalLayoutListener(this)
-                val initialPosition = imageView.left
-                horizontalSeekBar.progress = initialPosition
-                verticalSeekBar.progress = imageView.bottom
-            }
-        })
-
-        // Add a listener to the seek bar to move the image horizontally
-        horizontalSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(horizontalSeekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                imageView.translationX = progress.toFloat()
-            }
-
-            override fun onStartTrackingTouch(horizontalSeekBar: SeekBar?) {}
-
-            override fun onStopTrackingTouch(horizontalSeekBar: SeekBar?) {}
-        })
-        verticalSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(verticalSeekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                imageView.translationY = progress.toFloat()
-            }
-
-            override fun onStartTrackingTouch(verticalSeekBar: SeekBar?) {}
-
-            override fun onStopTrackingTouch(verticalSeekBar: SeekBar?) {}
-        })
-
-
+        setupSeekBarListeners(horzontalSeekBar, verticalSeekBar, imageView)
 
     }
 
+    private fun setupSeekBarListeners(horizontalSeekBar: SeekBar, verticalSeekBar: SeekBar, imageView: ImageView) {
+    // Set the progress of the seek bar to the initial position of the image
+    imageView.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+        override fun onGlobalLayout() {
+            imageView.viewTreeObserver.removeOnGlobalLayoutListener(this)
+            val initialPosition = imageView.left
+            horizontalSeekBar.progress = horizontalSeekBar.max / 2
+            verticalSeekBar.progress = verticalSeekBar.max / 2
+        }
+    })
+
+    // Add a listener to the seek bar to move the image horizontally
+    horizontalSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+        override fun onProgressChanged(horizontalSeekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+            imageView.translationX = progress.toFloat()
+        }
+
+        override fun onStartTrackingTouch(horizontalSeekBar: SeekBar?) {}
+
+        override fun onStopTrackingTouch(horizontalSeekBar: SeekBar?) {}
+    })
+
+    verticalSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+        override fun onProgressChanged(verticalSeekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+            imageView.translationY = progress.toFloat()
+        }
+
+        override fun onStartTrackingTouch(verticalSeekBar: SeekBar?) {}
+
+        override fun onStopTrackingTouch(verticalSeekBar: SeekBar?) {}
+    })
+}
 
     
     private fun initView() {
@@ -190,18 +194,89 @@ class MainActivity : AppCompatActivity() {
 //        图片分析
         imageAnalysis = ImageAnalysis.Builder()
             .setTargetResolution(size) //设置分辨率
+            .setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_RGBA_8888)
             .setBackpressureStrategy(ImageAnalysis.STRATEGY_BLOCK_PRODUCER)  //阻塞模式，setAnalyzer过于耗时会导致预览卡顿
             .setTargetRotation(Surface.ROTATION_90)
             .build()
 
-//        在绑定之前 你应该先解绑
-        cameraProvider.unbindAll()
-        var camera = cameraProvider.bindToLifecycle(
-            this as LifecycleOwner,
-            cameraSelector,
-            imageAnalysis,
-            preview
-        )
+        imageAnalysis?.setAnalyzer(mainExecutor, object : ImageAnalysis.Analyzer {
+            override fun analyze(image: ImageProxy) {
+                val buffer = image.planes[0].buffer
+                val rowStride = image.planes[0].rowStride
+                val pixelStride = image.planes[0].pixelStride
+                val centerX = image.width / 2 // 获取图像中心点横坐标
+                val centerY = image.height / 2 // 获取图像中心点纵坐标
+                val buttonLeft = centerX - centerButton.width / 2 // 计算Button的左边界
+                val buttonRight = centerX + centerButton.width / 2 // 计算Button的右边界
+                val buttonTop = centerY - centerButton.height / 2 // 计算Button的上边界
+                val buttonBottom = centerY + centerButton.height / 2 // 计算Button的下边界
+                var leftPixelCount = 0
+                var leftRedSum = 0
+                var leftGreenSum = 0
+                var leftBlueSum = 0
+                var rightPixelCount = 0
+                var rightRedSum = 0
+                var rightGreenSum = 0
+                var rightBlueSum = 0
+                for (y in buttonTop until buttonBottom) {
+                    for (x in buttonLeft until buttonRight) {
+                        val pixel = y * rowStride + x * pixelStride
+                        val red = (buffer.get(pixel).toInt() and 0xFF)
+                        val green = (buffer.get(pixel + 1).toInt() and 0xFF)
+                        val blue = (buffer.get(pixel + 2).toInt() and 0xFF)
+                        if (x < centerX) {
+                            // 左侧像素
+                            leftPixelCount++
+                            leftRedSum += red
+                            leftGreenSum += green
+                            leftBlueSum += blue
+                        } else {
+                            // 右侧像素
+                            rightPixelCount++
+                            rightRedSum += red
+                            rightGreenSum += green
+                            rightBlueSum += blue
+                        }
+                    }
+                }
+                val leftRedAvg = if (leftPixelCount > 0) leftRedSum / leftPixelCount else 0
+                val leftGreenAvg = if (leftPixelCount > 0) leftGreenSum / leftPixelCount else 0
+                val leftBlueAvg = if (leftPixelCount > 0) leftBlueSum / leftPixelCount else 0
+                val rightRedAvg = if (rightPixelCount > 0) rightRedSum / rightPixelCount else 0
+                val rightGreenAvg = if (rightPixelCount > 0) rightGreenSum / rightPixelCount else 0
+                val rightBlueAvg = if (rightPixelCount > 0) rightBlueSum / rightPixelCount else 0
+                Log.d("RGB", "Left: R=$leftRedAvg G=$leftGreenAvg B=$leftBlueAvg")
+                Log.d("RGB", "Right: R=$rightRedAvg G=$rightGreenAvg B=$rightBlueAvg")
+
+
+                //将获取到的RGB像素值，分别写入textview的Red，Green，Blue内
+                val L_red_edit: EditText = findViewById(R.id.Red)
+                L_red_edit.setText(leftRedAvg.toString())
+                val L_green_edit: EditText = findViewById(R.id.Green)
+                L_green_edit.setText(leftGreenAvg.toString())
+                val L_blue_edit: EditText = findViewById(R.id.Blue)
+                L_blue_edit.setText(leftBlueAvg.toString())
+
+                val R_red_edit: EditText = findViewById(R.id.Red2)
+                R_red_edit.setText(rightRedAvg.toString())
+                val R_green_edit: EditText = findViewById(R.id.Green2)
+                R_green_edit.setText(rightGreenAvg.toString())
+                val R_blue_edit: EditText = findViewById(R.id.Blue2)
+                R_blue_edit.setText(rightBlueAvg.toString())
+
+                image.close()
+                    }
+                })
+
+
+        //        在绑定之前 你应该先解绑
+                cameraProvider.unbindAll()
+                var camera = cameraProvider.bindToLifecycle(
+                    this as LifecycleOwner,
+                    cameraSelector,
+                    imageAnalysis,
+                    preview
+                )
     }
 
     /*
