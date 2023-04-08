@@ -34,7 +34,6 @@ android {
 }
 
 dependencies {
-    implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'com.github.lihangleo2:ShadowLayout:3.3.2'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'androidx.core:core-ktx:1.2.0'

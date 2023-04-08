@@ -20,12 +20,10 @@ import com.google.common.util.concurrent.ListenableFuture
 import kotlinx.android.synthetic.main.activity_main.*
 
 import android.graphics.*
-import android.graphics.drawable.Drawable
 import android.os.*
 import androidx.camera.core.ImageProxy
-import com.squareup.picasso.Picasso
-import com.squareup.picasso.Target
-import java.lang.Exception
+import java.lang.Math.*
+import kotlin.math.pow
 
 class MainActivity : AppCompatActivity() {
     private lateinit var cameraProviderFuture: ListenableFuture<ProcessCameraProvider>
@@ -218,6 +216,14 @@ class MainActivity : AppCompatActivity() {
                 var rightRedSum = 0
                 var rightGreenSum = 0
                 var rightBlueSum = 0
+                //将centerButton 分成左右两个区域，分别计算中心点RGB
+//                val leftPixel = (buttonTop + centerButton.height/2) * rowStride + (buttonLeft + centerButton.width/2)* pixelStride
+//                val leftRed = (buffer.get(leftPixel).toInt() and 0xFF)
+//                val leftGreen = (buffer.get(leftPixel + 1).toInt() and 0xFF)
+//                val leftBlue = (buffer.get(leftPixel + 2).toInt() and 0xFF)
+
+
+//                 将centerButton 分成左右两个区域，分别计算RGB
                 for (y in buttonTop until buttonBottom) {
                     for (x in buttonLeft until buttonRight) {
                         val pixel = y * rowStride + x * pixelStride
@@ -257,6 +263,27 @@ class MainActivity : AppCompatActivity() {
                 val L_blue_edit: EditText = findViewById(R.id.Blue)
                 L_blue_edit.setText(leftBlueAvg.toString())
 
+                val phColor = listOf(
+                    intArrayOf(0, 4, 206),
+                    intArrayOf(4, 41, 253),
+                    intArrayOf(7, 64, 250),
+                    intArrayOf(79, 83, 255),
+                    intArrayOf(4, 112, 254),
+                    intArrayOf(47, 171, 255),
+                    intArrayOf(93, 216, 196),
+                    intArrayOf(5, 201, 118),
+                    intArrayOf(241, 59, 17),
+                    intArrayOf(163, 0, 1),
+                    intArrayOf(110, 3, 0),
+                    intArrayOf(78, 25, 28)
+                )
+                // BGR顺序传入
+                val color = intArrayOf(leftGreenAvg,leftBlueAvg,leftRedAvg)
+                val PhValue = getPhValueFloat(color,phColor)
+                val PhText: EditText = findViewById(R.id.PH)
+                PhText.setText("PH:"+String.format("%.1f", PhValue))
+
+
                 val R_red_edit: EditText = findViewById(R.id.Red2)
                 R_red_edit.setText(rightRedAvg.toString())
                 val R_green_edit: EditText = findViewById(R.id.Green2)
@@ -278,6 +305,30 @@ class MainActivity : AppCompatActivity() {
                     preview
                 )
     }
+
+    fun getPhValueFloat(color: IntArray, phColor: List<IntArray>): Float{
+        val dists = mutableListOf<Float>()
+        for (i in phColor.indices) {
+            val dist = sqrt(
+                ((color[0] - phColor[i][0]).toDouble().pow(2) +
+                        (color[1] - phColor[i][1]).toDouble().pow(2) +
+                        (color[2] - phColor[i][2]).toDouble().pow(2))
+            ).toFloat()
+            dists.add(dist)
+        }
+        val minIndex1 = dists.indexOf(dists.minOrNull())
+        val dist1 = dists[minIndex1]
+        dists[minIndex1] = 999999f
+        val minIndex2 = dists.indexOf(dists.minOrNull())
+        val dist2 = dists[minIndex2]
+        val finalPh: Float = if (minIndex1 <= minIndex2) {
+            minIndex1 + abs(minIndex1 - minIndex2) * (dist1 / (dist1 + dist2))
+        } else {
+            minIndex1 - abs(minIndex1 - minIndex2) * (dist1 / (dist1 + dist2))
+        }
+        return finalPh + 1
+    }
+
 
     /*
       请求授权
