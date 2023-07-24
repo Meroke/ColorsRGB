@@ -9,9 +9,9 @@ android {
     buildToolsVersion "30.0.3"
 
     defaultConfig {
-        applicationId "com.duoshine.camerax"
+        applicationId 'com.duoshine.camerax'
         minSdkVersion 30
-        targetSdkVersion 30
+        targetSdkVersion 33
         versionCode 1
         versionName "1.0"
 
@@ -55,4 +55,5 @@ dependencies {
     implementation("androidx.camera:camera-view:1.0.0-alpha25")
     // If you want to additionally use the CameraX Extensions library
     implementation("androidx.camera:camera-extensions:1.0.0-alpha25")
+
 }

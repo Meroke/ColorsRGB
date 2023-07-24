@@ -32,14 +32,14 @@ class ResizableImageView(context: Context, attrs: AttributeSet) : androidx.appco
                 var newWidth = (150 * scale).toInt()
                 var newHeight = (150 * scale).toInt()
 
-                if( newWidth < 80)
-                    newWidth = 80
-                if( newWidth > 750)
-                    newWidth = 750
-                if (newHeight < 80)
-                    newHeight = 80
-                if( newHeight > 750)
-                    newHeight = 750
+//                if( newWidth < 80)
+//                    newWidth = 80
+//                if( newWidth > 750)
+//                    newWidth = 750
+//                if (newHeight < 80)
+//                    newHeight = 80
+//                if( newHeight > 750)
+//                    newHeight = 750
                 layoutParams.width = newWidth
                 layoutParams.height = newHeight
                 requestLayout()

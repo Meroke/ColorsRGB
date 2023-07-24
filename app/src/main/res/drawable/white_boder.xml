@@ -6,6 +6,7 @@
     <size
         android:width="15dp"
         android:height="15dp" />
-    <corners android:topRightRadius="20dp" android:bottomRightRadius="20dp"/>属性就是设置圆角
+    <corners android:topRightRadius="20dp" android:bottomRightRadius="20dp"
+        android:topLeftRadius="20dp" android:bottomLeftRadius="20dp"/>属性就是设置圆角
 
 </shape>
